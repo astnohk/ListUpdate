@@ -1,6 +1,12 @@
 #!/bin/sh
 
+#----------------------------------------------------------------
+# Config
+
 SRC_DIR='/home/pictures'
+
+#---------------------------------------------------------------
+
 SRC_DIR_REG=`echo ${SRC_DIR} | sed -e 's/\//\\\\\\//g'`
 DST_DIR_NAME='Update_List'
 DST_DIR="${SRC_DIR}/${DST_DIR_NAME}"
