@@ -3,9 +3,13 @@
 #----------------------------------------------------------------
 # Config
 
-SRC_DIR='/home/users/pictures'
+SRC_DIR='/home'
 
 #---------------------------------------------------------------
+
+if [ $# -ge 1 ]; then
+	SRC_DIR=$1
+fi
 
 SRC_DIR_REG=`echo ${SRC_DIR} | sed -e 's/\//\\\\\\//g'`
 DST_DIR_NAME='Update_List'
