@@ -3,7 +3,7 @@
 #----------------------------------------------------------------
 # Config
 
-SRC_DIR='/home/pictures'
+SRC_DIR='/home/users/pictures'
 
 #---------------------------------------------------------------
 
@@ -38,18 +38,20 @@ LIST=`diff -u list_current list_new | egrep "^\+" | egrep -v "\+\+" | sed -e 's/
 # Create diff directory
 NUM=`echo ${LIST} | sed -e 's/[:space:]//g' | wc -w`
 if [ ${NUM} -ne 0 ]; then
-	echo "mkdir -p ${YEAR}/${MONTH}/${DAY}"
-	mkdir -p ${DST_DIR}/${YEAR}/${MONTH}/${DAY}
-	diff -u list_current list_new >> ${DST_DIR}/${YEAR}/${MONTH}/${DAY}/diff_today
 	for NAME in ${LIST}
 	do
 		TRUENAME=`echo ${NAME} | sed -e 's/|/ /g'`
+		TMP_DATE=`stat --format="%Z" ${SRC_DIR}${TRUENAME}`
+		DIR_DATE=`date --date="@${TMP_DATE}" +%Y/%m/%d`
 		BASENAME=`basename ${NAME} | sed -e 's/|/ /g'`
 		DIR=`echo ${TRUENAME} | sed -e "s/\\/${BASENAME}//"`
+		# Make directory
+		echo "mkdir -p ${DIR_DATE}"
+		mkdir -p ${DST_DIR}/${DIR_DATE}
 		echo "        mkdir -p ${DIR}"
-		mkdir -p "${DST_DIR}/${YEAR}/${MONTH}/${DAY}${DIR}"
+		mkdir -p "${DST_DIR}/${DIR_DATE}${DIR}"
 		echo "                make symbolic link to ${TRUENAME}"
-		ln -sf "${SRC_DIR}${TRUENAME}" "${DST_DIR}/${YEAR}/${MONTH}/${DAY}${DIR}/${BASENAME}"
+		ln -sf "${SRC_DIR}${TRUENAME}" "${DST_DIR}/${DIR_DATE}${DIR}/${BASENAME}"
 	done
 fi
 
